@@ -7,6 +7,7 @@ Pub/Sub messaging server using websockets
 `user@host$ beeper -ws localhost:8888 -rest localhost:8889`
 ### Start command line interface
 `user@host$ beeper-cli -s localhost:8889`
+### Get help
 `>> help`
 ### Add topic
 `>> add test0`
