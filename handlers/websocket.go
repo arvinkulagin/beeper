@@ -1,11 +1,11 @@
 package handlers
 
 import (
-	"github.com/arvinkulagin/beeper/pubsub"
 	"github.com/arvinkulagin/beeper/config"
 	"github.com/arvinkulagin/beeper/log"
-	"github.com/gorilla/websocket"
+	"github.com/arvinkulagin/beeper/pubsub"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/websocket"
 	"net/http"
 )
 

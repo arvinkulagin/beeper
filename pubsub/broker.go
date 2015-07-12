@@ -1,8 +1,8 @@
 package pubsub
 
 import (
-	"sync"
 	"errors"
+	"sync"
 )
 
 func deleteSubscriber(subscribers []chan []byte, subscriber chan []byte) []chan []byte {
@@ -15,20 +15,20 @@ func deleteSubscriber(subscribers []chan []byte, subscriber chan []byte) []chan 
 }
 
 type Topic struct {
-	subscribe chan chan []byte
+	subscribe   chan chan []byte
 	unsubscribe chan chan []byte
-	publish chan []byte
-	count chan chan int
-	kill chan struct{}
+	publish     chan []byte
+	count       chan chan int
+	kill        chan struct{}
 }
 
 func NewTopic() Topic {
 	topic := Topic{
-		subscribe: make(chan chan []byte),
+		subscribe:   make(chan chan []byte),
 		unsubscribe: make(chan chan []byte),
-		publish: make(chan []byte),
-		count: make(chan chan int),
-		kill: make(chan struct{}),
+		publish:     make(chan []byte),
+		count:       make(chan chan int),
+		kill:        make(chan struct{}),
 	}
 	go func() {
 		subscribers := []chan []byte{}
@@ -60,13 +60,13 @@ func NewTopic() Topic {
 
 type Broker struct {
 	topics map[string]Topic
-	mutex sync.Mutex
+	mutex  sync.Mutex
 }
 
 func NewBroker() *Broker {
 	broker := Broker{
 		topics: make(map[string]Topic),
-		mutex: sync.Mutex{},
+		mutex:  sync.Mutex{},
 	}
 	return &broker
 }

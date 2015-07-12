@@ -1,22 +1,22 @@
 package config
 
 import (
-	"io/ioutil"
 	"encoding/json"
+	"io/ioutil"
 )
 
 type Config struct {
-	WSAddress string
+	WSAddress   string
 	RESTAddress string
-	Origin string
+	Origin      string
 	MessageType int
 }
 
 func Default() Config {
 	return Config{
-		WSAddress: "localhost:8888",
+		WSAddress:   "localhost:8888",
 		RESTAddress: "localhost:8889",
-		Origin: "",
+		Origin:      "",
 		MessageType: 1,
 	}
 }

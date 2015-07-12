@@ -1,8 +1,8 @@
 package pubsub
 
 import (
-	"testing"
 	"sync"
+	"testing"
 )
 
 func TestAddTopic(t *testing.T) {
@@ -43,7 +43,6 @@ func TestTopics(t *testing.T) {
 		t.Error("Wrong number of topics")
 	}
 }
-
 
 func TestSubscribe(t *testing.T) {
 	broker := NewBroker()

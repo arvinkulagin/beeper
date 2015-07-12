@@ -1,13 +1,13 @@
 package handlers
 
 import (
-	"net/http"
-	"fmt"
-	"io/ioutil"
 	"encoding/json"
-	"github.com/arvinkulagin/beeper/pubsub"
+	"fmt"
 	"github.com/arvinkulagin/beeper/log"
+	"github.com/arvinkulagin/beeper/pubsub"
 	"github.com/gorilla/mux"
+	"io/ioutil"
+	"net/http"
 )
 
 type List struct {

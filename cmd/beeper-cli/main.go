@@ -1,14 +1,14 @@
 package main
 
 import (
-	"log"
-	"fmt"
-	"os"
 	"bufio"
-	"strings"
 	"flag"
-	"text/tabwriter"
+	"fmt"
 	"github.com/arvinkulagin/beeper/api"
+	"log"
+	"os"
+	"strings"
+	"text/tabwriter"
 )
 
 func main() {

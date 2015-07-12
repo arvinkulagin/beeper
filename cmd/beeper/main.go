@@ -4,9 +4,9 @@ import (
 	"flag"
 	"github.com/arvinkulagin/beeper/config"
 	"github.com/arvinkulagin/beeper/handlers"
+	"github.com/arvinkulagin/beeper/log"
 	"github.com/arvinkulagin/beeper/pubsub"
 	"github.com/gorilla/mux"
-	"github.com/arvinkulagin/beeper/log"
 	"net/http"
 )
 

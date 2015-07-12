@@ -13,6 +13,6 @@ type Logger struct {
 func NewLogger() Logger {
 	return Logger{
 		Out: log.New(os.Stdout, "BEEPER ", log.LstdFlags),
-		Err: log.New(os.Stderr, "ERROR ", log.LstdFlags | log.Lshortfile),
+		Err: log.New(os.Stderr, "ERROR ", log.LstdFlags|log.Lshortfile),
 	}
 }

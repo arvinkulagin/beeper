@@ -1,18 +1,18 @@
 package api
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"io/ioutil"
 	"net/http"
 	"net/url"
-	"bytes"
-	"errors"
-	"encoding/json"
-	"io/ioutil"
 )
 
 const (
-	Scheme = "http"
+	Scheme      = "http"
 	TopicPrefix = "topic"
-	PingPrefix = "ping"
+	PingPrefix  = "ping"
 )
 
 type Client struct {
@@ -23,7 +23,7 @@ func NewClient(host string) (Client, error) {
 	c := Client{
 		URL: url.URL{
 			Scheme: Scheme,
-			Host: host,
+			Host:   host,
 		},
 	}
 	if err := c.Ping(); err != nil {
