@@ -35,7 +35,7 @@ func (h WSHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer conn.Close()
-	subscriber, err := h.Broker.Subscribe(id)
+	receiver, err := h.Broker.Subscribe(id)
 	if err != nil {
 		h.Logger.Err.Println(err)
 		return
@@ -48,14 +48,28 @@ func (h WSHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 		}
-		h.Broker.Unsubscribe(id, subscriber)
+		receiver.Close()
 		h.Logger.Out.Printf("Unsubscribe %s: %s\n", conn.RemoteAddr().String(), id)
 	}()
-	for msg := range subscriber {
-		err := conn.WriteMessage(h.Config.MessageType, msg)
+	for {
+		message, err := receiver.Receive()
 		if err != nil {
-			h.Logger.Err.Println(err)
+			return
+		}
+		err = conn.WriteMessage(websocket.TextMessage, message)
+		if err != nil {
 			return
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+

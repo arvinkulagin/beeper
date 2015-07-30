@@ -5,59 +5,6 @@ import (
 	"sync"
 )
 
-func deleteSubscriber(subscribers []chan []byte, subscriber chan []byte) []chan []byte {
-	for i, v := range subscribers {
-		if v == subscriber {
-			return append(subscribers[:i], subscribers[i+1:]...)
-		}
-	}
-	return subscribers
-}
-
-type Topic struct {
-	subscribe   chan chan []byte
-	unsubscribe chan chan []byte
-	publish     chan []byte
-	count       chan chan int
-	kill        chan struct{}
-}
-
-func NewTopic() Topic {
-	topic := Topic{
-		subscribe:   make(chan chan []byte),
-		unsubscribe: make(chan chan []byte),
-		publish:     make(chan []byte),
-		count:       make(chan chan int),
-		kill:        make(chan struct{}),
-	}
-	go func() {
-		subscribers := []chan []byte{}
-		defer func() {
-			for _, subscriber := range subscribers {
-				close(subscriber)
-			}
-		}()
-		for {
-			select {
-			case subscriber := <-topic.subscribe:
-				subscribers = append(subscribers, subscriber)
-			case subscriber := <-topic.unsubscribe:
-				subscribers = deleteSubscriber(subscribers, subscriber)
-				close(subscriber)
-			case msg := <-topic.publish:
-				for _, subscriber := range subscribers {
-					subscriber <- msg
-				}
-			case c := <-topic.count:
-				c <- len(subscribers)
-			case <-topic.kill:
-				return
-			}
-		}
-	}()
-	return topic
-}
-
 type Broker struct {
 	topics map[string]Topic
 	mutex  sync.Mutex
@@ -117,28 +64,29 @@ func (b *Broker) Count(id string) (int, error) {
 	return <-c, nil
 }
 
-func (b *Broker) Subscribe(id string) (chan []byte, error) {
-	subscriber := make(chan []byte) // Add buffer
+func (b *Broker) Subscribe(id string) (Receiver, error) {
 	b.mutex.Lock()
 	defer b.mutex.Unlock()
 	topic, ok := b.topics[id]
 	if !ok {
-		return subscriber, errors.New("Topic does not exist")
+		return Receiver{}, errors.New("Topic does not exist")
 	}
-	topic.subscribe <- subscriber
-	return subscriber, nil
+	receiver := topic.Subscribe()
+	return receiver, nil
 }
 
-func (b *Broker) Unsubscribe(id string, subscriber chan []byte) error {
-	b.mutex.Lock()
-	defer b.mutex.Unlock()
-	topic, ok := b.topics[id]
-	if !ok {
-		return errors.New("Topic does not exist")
-	}
-	topic.unsubscribe <- subscriber
-	return nil
-}
+
+// func (b *Broker) Unsubscribe(id string, subscriber chan []byte) error {
+// 	b.mutex.Lock()
+// 	defer b.mutex.Unlock()
+// 	topic, ok := b.topics[id]
+// 	if !ok {
+// 		return errors.New("Topic does not exist")
+// 	}
+// 	topic.unsubscribe <- subscriber
+// 	return nil
+// }
+
 
 func (b *Broker) Publish(id string, message []byte) error {
 	b.mutex.Lock()
